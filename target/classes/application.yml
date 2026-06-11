@@ -1,0 +1,32 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: shortest-url
+  mongodb:
+    uri: ${MONGODB_URI:mongodb://localhost:27017/dev_database}
+  data:
+    redis:
+      url: ${REDIS_URL:redis://localhost:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BROKERS:localhost:9092}
+    consumer:
+      group-id: shortest-url
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+shortest-url:
+  cache-ttl-seconds: ${CACHE_TTL:60}
+  count-range: ${COUNT_RANGE:10000}
+  visit-count-topic: ${VISIT_COUNT_TOPIC:increaseVisitCountByKey}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
